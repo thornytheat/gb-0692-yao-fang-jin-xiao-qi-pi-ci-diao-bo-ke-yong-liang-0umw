@@ -1,2 +1,10 @@
 {% extends 'base.html' %}
-{% block stage_visual %}{% for d in run.shortages[:6] %}<div class="stock-bar"><span>{{d["门店"]}}</span><i style="width:{{d["已分配"]*2}}px"></i><b>{{d["缺口"]}} 缺口</b></div>{% endfor %}{% endblock %}
+{% block stage_visual %}
+<div class="policy">
+  <span>策略</span>
+  <select id="policy" aria-label="优先级策略">{% for key,label in policies.items() %}<option value="{{key}}" {{'selected' if key==policy}}>{{label}}</option>{% endfor %}</select>
+  <button id="applyPolicy">按此策略重算</button>
+</div>
+{% for c in current.get('compare', []) %}<div class="stock-bar"><span>{{c["策略名称"]}}{{ ' · 采用' if c['采用']=='是' }}</span><i style="width:{{c['已分配']/8}}px"></i><b>缺口 {{c['缺口']}} / 急单缺口 {{c['急单缺口']}} / 可出库或部分 {{c['可出库单']}} 单</b></div>{% endfor %}
+<div class="legend">急单先：急单优先占用紧缺货，成套单可能落空。成套先：优先凑齐多药品整单，急单可能等货；缺套单整单回滚，不占库存。</div>
+{% endblock %}

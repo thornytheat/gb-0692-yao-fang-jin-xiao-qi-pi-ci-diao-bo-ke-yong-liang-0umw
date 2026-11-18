@@ -1,2 +1,5 @@
 {% extends 'base.html' %}
-{% block stage_visual %}{% for r in current.rows %}<div class="stock-bar"><span>{{r["项目"]}}</span><b>{{r["差额"]}} 件</b></div>{% endfor %}{% endblock %}
+{% block stage_visual %}
+{% for r in current.rows[:2] %}<div class="stock-bar"><span>{{r["项目"]}}</span><b>{{r["差额"]}} 件</b></div>{% endfor %}
+{% for o in current.get('orders', []) %}<div class="stock-bar"><span>{{o["订单"]}} · {{o["门店"]}}</span><b>{{o["可出库"]}}{% if o["缺口"] %} / 缺 {{o["缺口"]}}{% endif %}</b></div>{% endfor %}
+{% endblock %}

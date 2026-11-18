@@ -14,7 +14,8 @@ def apply(ctx):
             if r['kind']=='stock':
                 day(r['expiry'])
                 if not r['lot']: raise DomainError('MISSING','批号为空')
-            key=(r['kind'],r['record']);fingerprint=tuple((k,v) for k,v in r.items() if k!='行号')
+            key=(r['kind'],r['record'],r['sku'],r['lot'] if r['kind']=='stock' else '')
+            fingerprint=tuple((k,v) for k,v in r.items() if k!='行号')
             if key in seen:
                 if seen[key]==fingerprint: duplicates+=1
                 else: isolate(ctx,r,'CONFLICT','来源单号内容冲突')

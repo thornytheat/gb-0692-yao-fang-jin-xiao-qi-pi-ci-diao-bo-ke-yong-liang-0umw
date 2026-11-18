@@ -28,6 +28,9 @@
 | TRAP-19 | 召回优先 | 静默覆盖或误计 | 显式裁决并保留证据 | `app/modules/m2_lots/rules.py` | `tests/test_m2.py::test_recall_dominates` |
 | TRAP-23 | 效期端点 | 静默覆盖或误计 | 显式裁决并保留证据 | `app/modules/m3_expiry/rules.py` | `tests/test_m3.py::test_expired_isolated` |
 | TRAP-26 | 陈旧复核 | 静默覆盖或误计 | 显式裁决并保留证据 | `app/modules/m7_approval/rules.py` | `tests/test_m7.py::test_review_api_stale` |
+| TRAP-31 | 缺套单占货 | 先到先得会把紧缺药锁在凑不齐的单上 | 成套单整单预演，缺套回滚不扣库存并保留预演证据 | `app/domain.py` | `tests/test_kits.py::test_missing_kit_reserves_nothing` |
+| TRAP-32 | 急单与成套单争货 | 固定优先级使另一方无声落空 | 急单先/成套先双策略并列可查，选择入清单 | `app/modules/m5_allocation/rules.py` | `tests/test_kits.py::test_compare_reports_both_policies` |
+| TRAP-33 | 重试重复扣量 | 重新分配会再扣一遍库存 | 策略参与批次标识，同批重试复用批次 | `app/manifest.py` | `tests/test_kits.py::test_retry_same_orders_does_not_double_deduct` |
 
 ## 对账规则
 

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, Response
 import csv,io
 from app.errors import DomainError
+from app.config import SAMPLE
 from app.reader import decode
 from app.pipeline import calculate
 from app.store import save, latest, history, review, get_run
@@ -21,6 +22,7 @@ def display(value):
     import re
     from decimal import Decimal
     text=str(value)
+    if value is None: return '—'
     if re.fullmatch(r'-?[0-9]+\.[0-9]+',text):
         return format(Decimal(text),'.4f').rstrip('0').rstrip('.')
     return text
@@ -52,10 +54,11 @@ def health(): return {'status':'ok'}
 @app.route('/api/run',methods=['POST'])
 def run():
     if request.files:
-        raw=request.files['file'].read();text=decode(raw)
+        raw=request.files['file'].read();text=decode(raw);policy=request.args.get('policy')
     else:
-        payload=request.get_json(silent=True) or {};text=payload.get('csv')
-    return jsonify(save(calculate(text)))
+        payload=request.get_json(silent=True) or {};text=payload.get('csv');policy=payload.get('policy')
+    if text is None: text=SAMPLE.read_text(encoding='utf-8-sig')
+    return jsonify(save(calculate(text, policy=policy),text))
 @app.route('/api/runs/<ident>')
 def run_detail(ident): return jsonify(get_run(ident))
 @app.route('/api/history')
@@ -72,6 +75,7 @@ def evidence():
     rows=[]
     for index,stage in result['stages'].items():
         rows.extend({'阶段':index,**r} for r in stage['rows'])
+        rows.extend({'阶段':index+'-取舍对比',**r} for r in stage.get('compare',[]))
     rows.extend({'阶段':'隔离',**r} for r in result['quarantine'])
     fields=list(dict.fromkeys(['阶段','run_id','规则版本']+[k for r in rows for k in r]))
     writer=csv.DictWriter(out,fieldnames=fields);writer.writeheader()

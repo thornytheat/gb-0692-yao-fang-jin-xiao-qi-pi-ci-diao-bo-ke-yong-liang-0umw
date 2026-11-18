@@ -1,2 +1,8 @@
 {% extends 'base.html' %}
-{% block stage_visual %}{% for r in current.rows[:6] %}<div class="stock-bar"><span>{{r["门店"]}}</span><b>{{r["复核"]}}</b></div>{% endfor %}{% endblock %}
+{% block stage_visual %}
+{% for state,label in [('可出库','可出库'),('部分可出库','部分可出库'),('缺套待补','缺套待补'),('缺口待补','缺口待补')] %}
+{% set items = current.rows|selectattr('可出库','equalto',state)|list %}
+{% if items %}<div class="stock-bar"><span>{{label}}</span><b>{{items|length}} 单</b></div>{% endif %}
+{% endfor %}
+<div class="legend">散单缺口仍可部分补货；成套单整单缺套时不占货，待凑齐后再出。可出库指已分配量可下发，不涉及实际物流发运。</div>
+{% endblock %}

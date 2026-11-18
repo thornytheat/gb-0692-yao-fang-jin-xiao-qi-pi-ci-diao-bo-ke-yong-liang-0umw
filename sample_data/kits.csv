@@ -1,0 +1,8 @@
+record,kind,sku,lot,qty,frozen,pack,expiry,store,min_days,arrival,version,status
+S1001,stock,0001,K0001,10,0,5,2026-12-10,中央仓,0,2026-11-20,1,normal
+S1002,stock,0003,K0002,10,0,5,2026-12-10,中央仓,0,2026-11-20,1,normal
+U1001,demand,0001,,10,0,1,,门店甲,10,2026-11-20,1,urgent
+T1001,demand,0001,,5,0,1,,门店乙,10,2026-11-20,1,normal
+T1001,demand,0003,,5,0,1,,门店乙,10,2026-11-20,1,normal
+T1002,demand,0001,,5,0,1,,门店丙,10,2026-11-20,1,normal
+T1002,demand,0003,,5,0,1,,门店丙,10,2026-11-20,1,normal

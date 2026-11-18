@@ -1,5 +1,7 @@
 from pathlib import Path
-RULE_VERSION = "2026.11.18.2"
+RULE_VERSION = "2026.11.18.3"
+DEFAULT_POLICY = "urgent_first"
+POLICIES = {"urgent_first": "急单先", "set_first": "成套先"}
 TITLE = '药房近效期批次调拨与可用量'
 SHORT = 'pharma-fefo'
 MODULES = ['库存接收', '批号裁决', '效期分层', '需求净额', '调拨分配', '收发对账', '方案复核']
